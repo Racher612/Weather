@@ -49,8 +49,8 @@ class MainScreenViewModel @Inject constructor(
     private var helper : RetrofitHelper = RetrofitHelper()
 
     //displays loading circle if false
-    private val _loading = mutableStateOf(true)
-    val loading: State<Boolean> = _loading
+    private val privateLoading = mutableStateOf(false)
+    val loading: State<Boolean> = privateLoading
 
     init {
         factory
@@ -65,14 +65,15 @@ class MainScreenViewModel @Inject constructor(
             cityList.forEach {city ->
                 loadForecast(city, true)
             }
-            if (cityList.isNotEmpty()){
-                _loading.value = false
+            if (privateLocations.value.isEmpty()){
+                privateLoading.value = true
             }
         }
     }
 
 
     fun loadForecast(city : String, pinned: Boolean = false){
+        privateLoading.value = true
         viewModelScope.launch {
             factory.setCity(city)
             helper = factory.createHelper()
@@ -81,7 +82,7 @@ class MainScreenViewModel @Inject constructor(
                     privateCurrentCity.value = CityBar(city, pinned, it)
                 }
                 privateLocations.value += CityBar(city, pinned, it)
-                _loading.value = false
+                privateLoading.value = false
             }
         }
         searchCity.value = ""
@@ -115,9 +116,6 @@ class MainScreenViewModel @Inject constructor(
                     location
                 }
             }.toSet()
-            privateLocations.value.forEach{
-                Log.d("CITY BAR", it.toString())
-            }
         }
     }
 
@@ -128,6 +126,9 @@ class MainScreenViewModel @Inject constructor(
             }.toSet()
             locationsRepository.deleteLocation(city)
         }
+        privateCurrentCity.value = if (privateLocations.value.isNotEmpty())
+            privateLocations.value.first() else
+                null
     }
 
     fun changeCurrentCity(city : String){

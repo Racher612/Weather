@@ -1,13 +1,13 @@
 package com.project.weather.day.pres
 
-import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -20,11 +20,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -33,8 +31,8 @@ import com.project.weather.R
 import com.project.weather.common.compose.CityIcon
 import com.project.weather.common.compose.LoadingScreen
 import com.project.weather.common.compose.PlusButton
+import com.project.weather.common.compose.SwipeHintScreen
 import com.project.weather.common.compose.TrashButton
-import com.project.weather.day.domain.forecast.Forecast
 
 @Composable
 fun MainScreen(
@@ -78,7 +76,7 @@ fun Loader(
             LoadingScreen()
         } else {
             if (viewModel.currentCity.value == null){
-                LoadingScreen()
+                SwipeHintScreen()
             } else {
                 WeatherPreview(
                     cityBar = viewModel.currentCity.value!!,
@@ -103,9 +101,7 @@ fun LocationSelector(
 
     ) {
         val locations by viewModel.locations
-
-        Column(verticalArrangement = Arrangement.SpaceBetween) {
-            LazyColumn(
+         LazyColumn(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier
@@ -132,19 +128,22 @@ fun LocationSelector(
                     )
                 }
                 item{
-                    Box(modifier = Modifier.padding(vertical = 4.dp)){
-                        PlusButton(onClick = viewModel::openWindow)
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ){
+                        Box(modifier = Modifier.padding(vertical = 4.dp)){
+                            TrashButton(onClick = viewModel::cleanCities)
+                        }
+                        Box(modifier = Modifier.padding(vertical = 4.dp)){
+                            PlusButton(onClick = viewModel::openWindow)
+                        }
                     }
-
                 }
             }
-            Box(modifier = Modifier.padding(vertical = 4.dp)){
-                TrashButton(onClick = viewModel::cleanCities)
-            }
         }
-
     }
-}
 
 @Composable
 fun PopUpWindow(
@@ -167,4 +166,9 @@ fun PopUpWindow(
             }
         }
     }
+}
+
+@Composable
+fun NoCityScreen(){
+    SwipeHintScreen()
 }
