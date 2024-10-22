@@ -21,29 +21,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.project.weather.R
 import com.project.weather.common.design.MediumText
 import com.project.weather.common.design.gradientBackground
 
 @Composable
 fun SwipeHintScreen(modifier: Modifier = Modifier) {
     
-    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteTransition = rememberInfiniteTransition(label = "")
 
-    // Анимация смещения "кометы"
     val offsetX by infiniteTransition.animateFloat(
-        initialValue = -200f,  // Начальная позиция за экраном слева
-        targetValue = 800f,    // Конечная позиция за экраном справа
+        initialValue = -200f,
+        targetValue = 800f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = LinearEasing), // Длительность 1.5 сек
+            animation = tween(1500, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ), label = ""
     )
 
-    // Анимация изменения прозрачности
     val alpha by infiniteTransition.animateFloat(
-        initialValue = 0.5f,   // Полупрозрачный старт
-        targetValue = 0.1f,    // Прозрачность уменьшается к хвосту
+        initialValue = 0.5f,
+        targetValue = 0.1f,
         animationSpec = infiniteRepeatable(
             animation = tween(1500, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
@@ -57,46 +58,39 @@ fun SwipeHintScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround
     ) {
-        MediumText(text = "There is no location in your list.\nAdd some to view weather")
+        MediumText(text = stringResource(id = R.string.hint))
         Canvas(
             modifier = modifier
                 .fillMaxWidth()
-                .height(50.dp) // Уменьшенная высота
-                .padding(horizontal = 24.dp) // Равные отступы по краям
-                .background(Color.Transparent) // Убираем фон
+                .height(50.dp)
+                .padding(horizontal = 24.dp)
+                .background(colorResource(id = R.color.transparent))
         ) {
             val height = size.height
-
-//            Log.d("HEIGHT", offsetX.toString())
-
-            // Рисуем путь для "кометы" с хвостом
             val cometPath = Path().apply {
-                // Эллипсоидная головка кометы
                 addOval(androidx.compose.ui.geometry.Rect(
-                    left = offsetX - 35,  // Левый край эллипса
-                    top = height / 6,     // Верхний край
-                    right = offsetX + 35, // Правый край
-                    bottom = 3 * height / 6 // Нижний край
+                    left = offsetX - 55,
+                    top = height / 6,
+                    right = offsetX + 35,
+                    bottom = 3 * height / 6
                 ))
 
-                // Хвост кометы
-                moveTo(offsetX, height / 2)               // Начальная точка хвоста
-                lineTo(offsetX - 30, height / 6)          // Толстая передняя часть хвоста
-                lineTo(offsetX - 300, height / 3)         // Сужающийся участок хвоста
-                lineTo(offsetX - 80, 3 * height / 6)      // Низ хвоста
-                close()                                   // Замыкаем путь
+                moveTo(offsetX, height / 2)
+                lineTo(offsetX - 30, height / 6)
+                lineTo(offsetX - 300, height / 3)
+                lineTo(offsetX - 30, 3 * height / 6)
+                close()
             }
 
             drawPath(
                 path = cometPath,
                 brush = Brush.horizontalGradient(
                     colors = listOf(
-                        Color.Gray.copy(alpha = alpha),      // Голова кометы
-                        Color.Gray.copy(alpha = 0.3f)        // Хвост кометы
+                        Color.Gray.copy(alpha = alpha),
+                        Color.Gray.copy(alpha = 0.3f)
                     )
                 )
             )
-
         }
     }
 

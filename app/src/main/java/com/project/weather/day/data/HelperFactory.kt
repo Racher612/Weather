@@ -3,11 +3,11 @@ package com.project.weather.day.data
 import com.project.weather.day.domain.Binary
 
 class HelperFactory{
-    private var key : String = ""
+    private var key : String = RetrofitData.key
     private var city : String = ""
-    private var days : Int = 1
-    private var aqi : Binary = Binary.NO
-    private var alerts : Binary = Binary.NO
+    private var days : Int = RetrofitData.defaultDays
+    private var aqi : Binary = RetrofitData.defaultAqi
+    private var alerts : Binary = RetrofitData.defaultAlerts
 
     fun setKey(newKey : String) : HelperFactory {
         key = newKey

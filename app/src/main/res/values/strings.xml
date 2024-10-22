@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Weather</string>
+    <string name="hint">There is no location in your list.\nAdd some to view weather</string>
+    <string name="feels_like">Feels like %1$s °C</string>
+    <string name="temperature">%1$s °C</string>
+    <string name="wetness">Wetness:</string>
+    <string name="precipitation">Precipitation:</string>
+    <string name="wind">Wind:</string>
+    <string name="pressure">Pressure:</string>
+    <string name="percent">%</string>
+    <string name="millimeter">%1$s mm</string>
+    <string name="km_hour">%1$s km/h</string>
 </resources>

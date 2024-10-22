@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.weather.day.data.HelperFactory
 import com.project.weather.day.data.LocationsRepository
+import com.project.weather.day.data.RetrofitData
 import com.project.weather.day.data.RetrofitHelper
 import com.project.weather.day.domain.forecast.Forecast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,10 +53,6 @@ class MainScreenViewModel @Inject constructor(
     val loading: State<Boolean> = privateLoading
 
     init {
-        factory
-            .setKey("5c15963fedb146f3b41202947243107")
-            .setDays(1)
-
         viewModelScope.launch {
             val savedCities = locationsRepository.getSavedLocations().first()
             cityList.addAll(savedCities)
@@ -63,7 +60,7 @@ class MainScreenViewModel @Inject constructor(
             cityList.forEach {city ->
                 loadForecast(city, true)
             }
-            if (privateLocations.value.isEmpty()){
+            if (privateLocations.value.isNotEmpty()){
                 privateLoading.value = true
             }
         }
@@ -96,8 +93,6 @@ class MainScreenViewModel @Inject constructor(
                     location
                 }
             }.toSet()
-            privateLocations.value.forEach{
-            }
         }
     }
 
@@ -145,5 +140,6 @@ class MainScreenViewModel @Inject constructor(
             locationsRepository.cleanAllLocations()
         }
         privateLocations.value = emptySet()
+        privateCurrentCity.value = null
     }
 }

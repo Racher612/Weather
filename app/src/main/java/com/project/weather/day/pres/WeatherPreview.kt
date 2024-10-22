@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.project.weather.R
 import com.project.weather.common.compose.WeatherIcon
@@ -99,7 +100,7 @@ fun Hour(
             modifier = Modifier
                 .padding(8.dp)){
             MediumText(text = hour.time.split(" ")[1])
-            MediumText(text = "${hour.temp_c} °C")
+            MediumText(text = stringResource(id = R.string.temperature, hour.temp_c))
             WeatherIcon(weather = hour.condition.text)
             MediumText(text = "rain: ${hour.chance_of_rain}%")
         }
@@ -119,23 +120,23 @@ fun Conditions(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier.padding(8.dp)
         ) {
-            MediumText(text = "Wetness:")
-            MediumText(text = "Precipitation:")
-            MediumText(text = "Wind:")
-            MediumText(text = "Pressure:")
+            MediumText(text = stringResource(id = R.string.wetness))
+            MediumText(text = stringResource(id = R.string.precipitation))
+            MediumText(text = stringResource(id = R.string.wind))
+            MediumText(text = stringResource(id = R.string.pressure))
         }
         Column (
             verticalArrangement = Arrangement.spacedBy(4.dp),
             modifier = Modifier.padding(8.dp)
         ) {
             //wetness
-            MediumText(text = "${it.current.humidity}%")
+            MediumText(text = "${it.current.humidity}${stringResource(id = R.string.percent)}")
             //precipitation
-            MediumText(text = "${it.current.precip_mm} mm")
+            MediumText(text = stringResource(id = R.string.millimeter, it.current.precip_mm))
             //Wind
-            MediumText(text = "${it.current.wind_kph} km/h")
+            MediumText(text = stringResource(id = R.string.km_hour, it.current.wind_kph))
             //Pressure
-            MediumText(text = "${it.current.precip_mm} mm")
+            MediumText(text = stringResource(id = R.string.millimeter, it.current.precip_mm))
         }
     }
 }
@@ -176,10 +177,10 @@ fun Temperature(it : Forecast){
             modifier = Modifier.fillMaxWidth()
         ) {
             MediumText(
-                text = "${ it.current.temp_c.toString() } °C"
+                text = stringResource(id = R.string.temperature, it.current.temp_c)
             )
             MediumText(
-                text = "Feels like ${it.current.feelslike_c } °C"
+                text = stringResource(id = R.string.feels_like, it.current.feelslike_c)
             )
         }
     }
