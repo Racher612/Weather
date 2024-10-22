@@ -15,21 +15,17 @@ class LocationsRepository(private val context: Context) {
 
     private val LOCATIONS_KEY = stringSetPreferencesKey("locations")
 
-    // Функция для сохранения локаций
     suspend fun saveLocations(location: String) {
         context.dataStore.edit { preferences ->
             val currentLocations = preferences[LOCATIONS_KEY] ?: emptySet()
             preferences[LOCATIONS_KEY] = currentLocations + location
-            Log.d("OBSERVE LOCATIONS", preferences[LOCATIONS_KEY].toString())
         }
     }
 
-    // Функция для удаления локации
     suspend fun deleteLocation(location: String) {
         context.dataStore.edit { preferences ->
             val currentLocations = preferences[LOCATIONS_KEY] ?: emptySet()
             preferences[LOCATIONS_KEY] = currentLocations - location
-            Log.d("OBSERVE LOCATIONS", preferences[LOCATIONS_KEY].toString())
         }
     }
 
@@ -39,11 +35,9 @@ class LocationsRepository(private val context: Context) {
         }
     }
 
-    // Функция для получения сохранённых локаций
     fun getSavedLocations(): Flow<Set<String>> {
         return context.dataStore.data
             .map { preferences ->
-                Log.d("GET LOCATIONS", preferences.toString())
                 preferences[LOCATIONS_KEY] ?: emptySet()
             }
         }

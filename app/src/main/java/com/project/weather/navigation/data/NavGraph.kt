@@ -13,7 +13,6 @@ fun NavGraph(
     navController: NavHostController,
 
 ){
-
     val navigateToRoute: (String) -> Unit = {route ->
         navController.navigate(route) {
             launchSingleTop = true
@@ -29,9 +28,6 @@ fun NavGraph(
             MainScreen(navigateToRoute = navigateToRoute, modifier = Modifier)
         }
         composable(Routes.Settings.route){
-
-        }
-        composable(Routes.DayScreen.route){
 
         }
     }

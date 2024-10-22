@@ -1,6 +1,5 @@
 package com.project.weather.day.pres
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
@@ -60,7 +59,6 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val savedCities = locationsRepository.getSavedLocations().first()
             cityList.addAll(savedCities)
-            Log.d("CITY LIST", cityList.toString())
 
             cityList.forEach {city ->
                 loadForecast(city, true)
@@ -89,7 +87,6 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun addCityToStorage(city : String){
-        Log.d("ADD", city)
         viewModelScope.launch {
             locationsRepository.saveLocations(city)
             privateLocations.value = privateLocations.value.map { location ->
@@ -100,13 +97,11 @@ class MainScreenViewModel @Inject constructor(
                 }
             }.toSet()
             privateLocations.value.forEach{
-                Log.d("CITY BAR", it.toString())
             }
         }
     }
 
     fun deleteCityFromStorage(city : String){
-        Log.d("DELETE", city)
         viewModelScope.launch {
             locationsRepository.deleteLocation(city)
             privateLocations.value = privateLocations.value.map { location ->
